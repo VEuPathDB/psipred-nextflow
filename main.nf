@@ -6,12 +6,16 @@ process psipred {
     input:
     path 'subset.fa' from seq_qch
     output:
-    path 'subset.horiz' into output_qch
-        
+    path 'subset.horiz' into horiz_qch
+    path 'subset.ss' into ss_qch
+    path 'subset.ss2' into ss2_qch
+
     """
     cp -r /work/psipred/* ./
     runpsipred_single subset.fa 
     """
 }
 
-results = output_qch.collectFile(storeDir: params.outputDir, name: params.outputFileName)
+results_horiz = horiz_qch.collectFile(storeDir: params.outputDir, name: "output.horiz")
+results_ss = ss_qch.collectFile(storeDir: params.outputDir, name: "output.ss")
+results_ss2 = ss2_qch.collectFile(storeDir: params.outputDir, name: "output.ss2")
