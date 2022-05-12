@@ -11,7 +11,6 @@ process psipred {
     path 'subset.ss2' into ss2_qch
 
     """
-    cp -r /work/psipred/* ./
     runpsipred_single subset.fa 
     """
 }
