@@ -11,7 +11,9 @@ process psipred {
     path 'subset.ss2' into ss2_qch
 
     """
-    runpsipred_single subset.fa 
+    cat $params.databaseFasta > newdb.fasta
+    makeblastdb -in newdb.fasta -dbtype $params.dbType
+    runpsipred_single subset.fa newdb.fasta 
     """
 }
 
