@@ -1,10 +1,8 @@
-nextflow.enable.dsl=1
-seq_qch = Channel.fromPath(params.inputFilePath).splitFasta( by:1, file:true  )
-db_vch = Channel.value()
+nextflow.enable.dsl=2
 
 process createDatabase {
     output:
-    path 'newdb.fasta' into db_vch
+    path 'newdb.fasta'
     """
     cat $params.databaseFasta > newdb.fasta
     makeblastdb -in newdb.fasta -dbtype $params.dbType
@@ -13,18 +11,19 @@ process createDatabase {
 
 process psipred {
     input:
-    path 'subset.fa' from seq_qch
-    path 'newdb.fasta' from db_vch
+    path 'subset.fa'
+    path 'newdb.fasta'
     output:
-    path 'subset.horiz' into horiz_qch
-    path 'subset.ss' into ss_qch
-    path 'subset.ss2' into ss2_qch
-
+    path 'subset.horiz'
+    path 'subset.ss' 
+    path 'subset.ss2'
     """
     runpsipred_single subset.fa newdb.fasta 
     """
 }
 
-results_horiz = horiz_qch.collectFile(storeDir: params.outputDir, name: "output.horiz")
-results_ss = ss_qch.collectFile(storeDir: params.outputDir, name: "output.ss")
-results_ss2 = ss2_qch.collectFile(storeDir: params.outputDir, name: "output.ss2")
+workflow {
+  database = createDatabase()
+  seqs = channel.fromPath(params.inputFilePath).splitFasta( by:1,file:true)
+  psipred(database, seqs)
+}
