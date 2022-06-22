@@ -10,6 +10,7 @@ process createDatabase {
 }
 
 process psipred {
+    publishDir params.outputDir, mode: 'copy'
     input:
     path 'subset.fa'
     path 'newdb.fasta'
