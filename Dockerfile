@@ -27,7 +27,7 @@ Run wget http://bioinfadmin.cs.ucl.ac.uk/downloads/psipred/old_versions/psipred.
 COPY bin/runpsipred_single /usr/local/share/psipred/
 
 # Making runpsipred_single executable
-RUN cd /usr/local/share/psipred  &&  chmod +x runpsipred_single
+RUN cd /usr/local/share/psipred  &&  chmod +x runpsipred*
 
 # Install and set up of ncbi blast toolkit
 Run wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.13.0+-x64-linux.tar.gz \
