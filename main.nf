@@ -18,5 +18,8 @@ process psipred {
 
 workflow {
   seqs = channel.fromPath(params.inputFilePath).splitFasta( by:1,file:true)
-  psipred(seqs)
+  results = psipred(seqs)
+  results[0] | collectFile(storeDir: params.outputDir)
+  results[1] | collectFile(storeDir: params.outputDir)
+  results[2] | collectFile(storeDir: params.outputDir)
 }
