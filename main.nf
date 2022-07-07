@@ -2,24 +2,22 @@ nextflow.enable.dsl=2
 
 process psipred {
     publishDir params.outputDir, mode: 'copy'
-
     input:
-    path 'subset.fa'
-    
+    tuple val(id), val(seq)
+    val (fix)
     output:
-    path 'subset.horiz'
-    path 'subset.ss' 
-    path 'subset.ss2'
-
+    path '*.horiz'
+    path '*.ss' 
+    path '*.ss2'
+    
     """
-    runpsipred_single subset.fa 
+    echo '$seq' >  '$id$fix'
+    runpsipred_single '$id$fix'
     """
 }
 
 workflow {
-  seqs = channel.fromPath(params.inputFilePath).splitFasta( by:1,file:true)
-  results = psipred(seqs)
-  results[0] | collectFile(storeDir: params.outputDir)
-  results[1] | collectFile(storeDir: params.outputDir)
-  results[2] | collectFile(storeDir: params.outputDir)
+  seqs = channel.fromPath(params.inputFilePath).splitFasta(record:[id:true,sequence:true])
+  fix = ".fasta"
+  psipred(seqs, ".fasta")
 }
