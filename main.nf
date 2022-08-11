@@ -1,26 +1,30 @@
+#!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
-process psipred {
-  publishDir params.outputDir, mode: 'copy'
+//--------------------------------------------------------------------------
+// Param Checking
+//--------------------------------------------------------------------------
 
-  input:
-    tuple val(id), val(seq)
-    val (fix)
-
-  output:
-    path '*.horiz'
-    path '*.ss' 
-    path '*.ss2'
-
-  script:  
-    """
-    echo '$seq' >  '$id$fix'
-    runpsipred_single '$id$fix'
-    """
-}
-
-workflow {
+if (params.inputFilePath) {
   seqs = channel.fromPath(params.inputFilePath)
            .splitFasta(record:[id:true,sequence:true])
-  psipred( seqs, ".fasta" )
+}
+else {
+  throw new Exception("Missing params.inputFilePath")
+}
+
+//--------------------------------------------------------------------------
+// Includes
+//--------------------------------------------------------------------------
+
+include { psipred } from './modules/psipred.nf'
+
+//--------------------------------------------------------------------------
+// Main Workflow
+//--------------------------------------------------------------------------
+
+workflow {
+  
+  psipred( seqs )
+  
 }
