@@ -11,15 +11,16 @@ process psipred {
     path '*.horiz'
     path '*.ss' 
     path '*.ss2'
-    
-  """
-  echo '$seq' >  '$id$fix'
-  runpsipred_single '$id$fix'
-  """
+
+  script:  
+    """
+    echo '$seq' >  '$id$fix'
+    runpsipred_single '$id$fix'
+    """
 }
 
 workflow {
-  seqs = channel.fromPath(params.inputFilePath).splitFasta(record:[id:true,sequence:true])
-  fix = ".fasta"
-  psipred(seqs, ".fasta")
+  seqs = channel.fromPath(params.inputFilePath)
+           .splitFasta(record:[id:true,sequence:true])
+  psipred( seqs, ".fasta" )
 }
