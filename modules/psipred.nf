@@ -20,6 +20,7 @@ process runPsipred {
 workflow psipred {
   take:
     seqs
+
   main:
     runPsipred(seqs, ".fasta")
 }
