@@ -1,6 +1,6 @@
 # Nextflow Conversion of PsipredTask.pm
 
-***<p align=center>Mitoprot</p>***  
+***<p align=center>PsiPred</p>***  
 ```mermaid
 flowchart TD
     p0((Channel.fromPath))
