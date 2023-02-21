@@ -1,5 +1,23 @@
 # Nextflow Conversion of PsipredTask.pm
 
+***<p align=center>PsiPred</p>***  
+```mermaid
+flowchart TD
+    p0((Channel.fromPath))
+    p1([splitFasta])
+    p2(( ))
+    p3[psipred:runPsipred]
+    p4(( ))
+    p5(( ))
+    p6(( ))
+    p0 --> p1
+    p1 -->|seqs| p3
+    p2 -->|fix| p3
+    p3 --> p6
+    p3 --> p5
+    p3 --> p4
+```
+
 Decription of nextflow configuration parameters:
 
 | param         | value type        | description  |
