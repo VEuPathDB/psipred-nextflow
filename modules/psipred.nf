@@ -1,6 +1,18 @@
 #!/usr/bin/env nextflow
 nextflow.enable.dsl=2
 
+process removeSeqsOver10K {
+
+  input:
+    path unfiltered
+
+  output:
+    path 'filtered.fasta'
+
+  script:  
+    template 'removeSeqsOver10K.bash'
+}
+
 process runPsipred {
   publishDir params.outputDir, mode: 'copy'
 
@@ -19,8 +31,13 @@ process runPsipred {
 
 workflow psipred {
   take:
-    seqs
+    inputFile
 
   main:
+
+    filtered = removeSeqsOver10K(inputFile)
+
+    seqs = filtered.splitFasta(record:[id:true,sequence:true])
+
     runPsipred(seqs, ".fasta")
 }

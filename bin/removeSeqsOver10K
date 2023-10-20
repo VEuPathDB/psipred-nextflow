@@ -1,0 +1,27 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Getopt::Long;
+use Bio::SeqIO;
+
+my ($unfiltered);
+
+&GetOptions("unfiltered=s"=> \$unfiltered);
+
+my $in  = Bio::SeqIO->new(-file => "$unfiltered",
+                          -format => 'Fasta');
+
+my $filtered = Bio::SeqIO->new(-file => ">filtered.fasta" ,
+                                   -format => 'Fasta');
+while ( my $seq = $in->next_seq() ) {
+    if(length $seq->seq() <= 10000) {
+        $filtered->write_seq($seq);
+    }
+    else {
+	my $seqId = $seq->id();
+        print "Skipping $seqId , sequence too long!\n";
+    }
+}
+
+1;
