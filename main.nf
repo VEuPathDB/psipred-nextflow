@@ -6,7 +6,9 @@ nextflow.enable.dsl=2
 //--------------------------------------------------------------------------
 
 if (params.inputFilePath) {
-  inputFile = channel.fromPath(params.inputFilePath)
+  seqs = channel.fromPath(params.inputFilePath)
+         .splitFasta(record:[id:true,sequence:true])
+	 .filter { record -> record.sequence.length() <= 10000 }
 }
 else {
   throw new Exception("Missing params.inputFilePath")
@@ -24,6 +26,6 @@ include { psipred } from './modules/psipred.nf'
 
 workflow {
   
-  psipred( inputFile )
+  psipred( seqs )
   
 }
