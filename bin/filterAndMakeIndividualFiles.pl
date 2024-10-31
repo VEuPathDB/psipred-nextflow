@@ -23,6 +23,9 @@ while (my $seq = $seqio->next_seq) {
     my $id = $seq->id();
     my $sequence = $seq->seq();
 
+    # U aa causes errors in psipred
+    $sequence =~ s/U/X/g;
+
     next if(length($sequence) > $maxSequenceLength);
 
     open(OUT, ">${id}.seq") or die "Cannot open file ${id}.seq for writing: $!";

@@ -36,9 +36,10 @@ workflow {
   psipred(psipredInput.seq)
   bed = psipred2bedgraph(psipred.out)
 
-  bedgraph2bigwig_coil(bed.coil.collectFile(), psipredInput.proteinSizes, "coil")
-  bedgraph2bigwig_helix(bed.helix.collectFile(), psipredInput.proteinSizes, "helix")
-  bedgraph2bigwig_extended(bed.extended.collectFile(), psipredInput.proteinSizes, "extended")
+  proteinSizes = psipredInput.proteinSizes.collectFile()
+  bedgraph2bigwig_coil(bed.coil.collectFile(), proteinSizes, "coil")
+  bedgraph2bigwig_helix(bed.helix.collectFile(), proteinSizes, "helix")
+  bedgraph2bigwig_extended(bed.extended.collectFile(), proteinSizes, "extended")
 }
 
 

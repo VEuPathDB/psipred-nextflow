@@ -30,11 +30,21 @@ foreach my $seqFile (@ARGV) {
         my @a = split(/\s+/, $line);
 
         # bedgraph uses zero based coordinates
-        my $loc = $a[0] - 1;
+        my $start = $a[0] - 1;
+        my $end = $a[0];
 
-        print COIL join("\t", $proteinId, $loc, $loc, $a[3]) . "\n";
-        print HELIX join("\t", $proteinId, $loc, $loc, $a[4]) . "\n";
-        print BETA join("\t", $proteinId, $loc, $loc, $a[5]) . "\n";
+        my $coilScore = $a[3] * 10;
+        my $coilRoundedScore = sprintf("%.0f", $coilScore);
+
+        my $helixScore = $a[4] * 10;
+        my $helixRoundedScore = sprintf("%.0f", $helixScore);
+
+        my $betaScore = $a[5] * 10;
+        my $betaRoundedScore = sprintf("%.0f", $betaScore);
+
+        print COIL join("\t", $proteinId, $start, $end, $coilRoundedScore) . "\n";
+        print HELIX join("\t", $proteinId, $start, $end, $helixRoundedScore) . "\n";
+        print BETA join("\t", $proteinId, $start, $end, $betaRoundedScore) . "\n";
     }
 
     close FILE;

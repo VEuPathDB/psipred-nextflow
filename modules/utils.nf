@@ -13,13 +13,13 @@ process bedgraph2bigwig {
   val type
 
   output:
-  path "psipred_${type}.bw"
+  path "${params.outputFilePrefix}_${type}.bw"
 
   script:
   """
   sort -k1,1 -k2,2n $bed > sorted_input.bedgraph
 
-  bedGraphToBigWig sorted_input.bedgraph $sizes psipred_${type}.bw
+  bedGraphToBigWig sorted_input.bedgraph $sizes ${params.outputFilePrefix}_${type}.bw
   """
 
 }
