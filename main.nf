@@ -13,9 +13,22 @@ else {
   throw new Exception("Missing params.inputFilePath")
 }
 
+
+//--------------------------------------------------------------------------
+// Modules
+//--------------------------------------------------------------------------
+
+
+
+include { bedgraph2bigwig as bedgraph2bigwig_coil } from './modules/utils.nf'
+include { bedgraph2bigwig as bedgraph2bigwig_helix } from './modules/utils.nf'
+include { bedgraph2bigwig as bedgraph2bigwig_extended } from './modules/utils.nf'
+
 //--------------------------------------------------------------------------
 // Main Workflow
 //--------------------------------------------------------------------------
+
+
 
 workflow {
 
@@ -23,32 +36,11 @@ workflow {
   psipred(psipredInput.seq)
   bed = psipred2bedgraph(psipred.out)
 
-  bedgraph2bigwig(bed.coil.collectFile(), psipredInput.proteinSizes)
-  //bed.out.helix.collectFile()
-  //bed.out.extended.collectFile()
-
+  bedgraph2bigwig_coil(bed.coil.collectFile(), psipredInput.proteinSizes, "coil")
+  bedgraph2bigwig_helix(bed.helix.collectFile(), psipredInput.proteinSizes, "helix")
+  bedgraph2bigwig_extended(bed.extended.collectFile(), psipredInput.proteinSizes, "extended")
 }
 
-//TODO make this a module
-process bedgraph2bigwig {
-  container 'quay.io/biocontainers/ucsc-bedgraphtobigwig:469--h9b8f530_0'
-
-  input:
-  path bed
-  path sizes
-
-  output:
-  path "output.bw"
-
-  script:
-  """
-  sort -k1,1 -k2,2n $bed > sorted_input.bedgraph
-
-  bedGraphToBigWig sorted_input.bedgraph $sizes output.bw
-  """
-
-}
-//
 
 process psipred2bedgraph {
   container 'bioperl/bioperl:stable'
@@ -91,7 +83,7 @@ process filterAndMakeIndividualFiles {
 
 
 process psipred {
-  //publishDir params.outputDir, mode: 'copy'
+
   container = 'veupathdb/psipred:latest'
   input:
      path x
