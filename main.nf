@@ -85,7 +85,7 @@ process filterAndMakeIndividualFiles {
 
 process psipred {
 
-  container = 'veupathdb/psipred:1.0.0'
+  container 'veupathdb/psipred:1.0.0'
   input:
      path x
 
