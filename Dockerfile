@@ -15,7 +15,7 @@ RUN apt-get install -y \
   tcsh
 
 # Install and set up of Psipred.
-Run wget http://bioinfadmin.cs.ucl.ac.uk/downloads/psipred/old_versions/psipred.4.0.tar.gz  \
+Run wget --no-check-certificate http://bioinfadmin.cs.ucl.ac.uk/downloads/psipred/old_versions/psipred.4.0.tar.gz  \
   && tar -zxvf psipred.4.0.tar.gz \
   && rm psipred.4.0.tar.gz \
   && cd psipred/src  \
@@ -30,12 +30,12 @@ COPY bin/runpsipred_single /usr/local/share/psipred/
 RUN cd /usr/local/share/psipred  &&  chmod +x runpsipred*
 
 # Install and set up of ncbi blast toolkit
-Run wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/LATEST/ncbi-blast-2.14.1+-x64-linux.tar.gz  \
+Run wget https://ftp.ncbi.nlm.nih.gov/blast/executables/blast+/2.14.1/ncbi-blast-2.14.1+-x64-linux.tar.gz  \
   && tar -zxvf ncbi-blast-2.14.1+-x64-linux.tar.gz  \
-  && rm ncbi-blast-2.14.1+-x64-linux.tar.gz  
+  && rm ncbi-blast-2.14.1+-x64-linux.tar.gz
 
 # Setting Path variable
-ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/share/ncbi-blast-2.13.0+/bin:/usr/local/share/psipred/bin:/usr/local/share/psipred/:/usr/local/share/psipred/data:/usr/local/share/psipred/BLAST+:/usr/local/share/psipred/src
+ENV PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/share/ncbi-blast-2.14.1+/bin:/usr/local/share/psipred/bin:/usr/local/share/psipred/:/usr/local/share/psipred/data:/usr/local/share/psipred/BLAST+:/usr/local/share/psipred/src
 
 WORKDIR /work
 
