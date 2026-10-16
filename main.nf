@@ -5,15 +5,6 @@ nextflow.enable.dsl=2
 // Param Checking
 //--------------------------------------------------------------------------
 
-if (params.inputFilePath) {
-  seqs = channel.fromPath(params.inputFilePath)
-    .splitFasta(by:params.fastaSubsetSize, file: true)
-}
-else {
-  throw new Exception("Missing params.inputFilePath")
-}
-
-
 //--------------------------------------------------------------------------
 // Modules
 //--------------------------------------------------------------------------
@@ -31,6 +22,13 @@ include { bedgraph2bigwig as bedgraph2bigwig_extended } from './modules/utils.nf
 
 
 workflow {
+  if (params.inputFilePath) {
+    seqs = channel.fromPath(params.inputFilePath)
+      .splitFasta(by:params.fastaSubsetSize, file: true)
+  }
+  else {
+    error "Missing params.inputFilePath"
+  }
 
   psipredInput = filterAndMakeIndividualFiles(seqs)
   psipred(psipredInput.seq)
